@@ -1,0 +1,33 @@
+- introduction (slide 3)
+  - OptiFast is a custom eyewear company.
+  - Users can choose from a wide selection of frames, lenses, nose pads and cases.
+  - If they use prescription glasses or have their measurements from previous purchases, they could attach those as well.
+  - Upon receiving their order, a pair matching their customization is made, packaged, and delivered.
+  - OptiFast is targetting two markets.
+    - Young, internet savvy people are their primary market, so it is important that the consumer-facing solutions we develop are responsive, stylish and fun.
+    - OptiFast also considers retirees and the older population as a secondary market. For them, being able to place orders by phone is important.
+  - The developed system should account for all of these.
+  - In addition, different company groups have requirements for the system that are particular to them.
+    - **during the course of the presentation, we will show some of these requirements and how they were gathered.**
+- ==peste analysis==
+  - it is tricky to perform a peste analysis for a purely software consultancy company.
+  - the factors outlined here are directly related to the client company.
+  - then you go over the different parts on at a time
+  - "and here is a high-level illustration of the most important factors from each segment."
+  - political
+    - the political factors affecting the project are similar to those affecting OptiFast
+      - for example, government policies like tariffs could impact the cost of procuring and shipping materials
+      - political stability of the country in which OptiFast is situated is another factor.
+  - economic
+    - It was stipulated in the final agreement with OptiFast that a working MVP be shipped and tested before a particular date
+  - social
+    - Considering social factors, the two market segments of OptiFast come into play here.
+    - Generally speaking, the younger population values sustainability while the much older population values easy-to-use features
+  - technological
+    - 
+  - legal
+  - ecological
+- groups to give feedback to
+  - G17
+  - G20
+  - G34

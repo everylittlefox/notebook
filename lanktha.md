@@ -1,0 +1,2 @@
+- lanktha is a stripped-down/barebones markdown flavour with support for easy Symbolic and Numerical calculations.
+- it uses numpy for numerical calculations and sympy for symbol.

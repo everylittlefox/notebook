@@ -1,0 +1,1 @@
+- notes in this folder are from readings of the electronics wiki textbook managed by [Analog Devices](https://analog.com). Link [here](https://wiki.analog.com/university/courses/electronics/text/electronics-toc).

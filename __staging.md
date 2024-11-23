@@ -1,0 +1,2 @@
+- in FET transistors, why is the substrate usually connected to the ground/source?
+- what does it mean to bias an FET for use as an amplifier?

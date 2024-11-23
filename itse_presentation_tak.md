@@ -1,0 +1,7 @@
+- component cloud G34
+  - shipping custom PCs
+  - customers aren't in stakeholder map
+- G17
+  - custom furniture
+- G20
+  - custom bikes
