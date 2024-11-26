@@ -1,0 +1,23 @@
+- steps in compilation
+  - scanning or lexing
+    - input stream is converted into chunks similar to words (these "words" are called **tokens**).
+  - parsing
+    - in this step, the generated tokens from lexing is infused with *grammar*.
+    - where the AST is built from a flast list of tokens
+  - static analysis
+    - where the AST is made sense of so to speak
+    - binding or resolution
+      - where every *identifier* is matched to the value it refers and to which *scope*
+    - type checking
+  - intermediate representations
+    - forms an interface between the frontend and backend
+  - optimization
+  - code generation
+- approaches to object orientation
+  - classes
+    - there are *instances* of *classes*
+    - instances hold the state (and of what classes they are) of a particular object while classes hold the methods and inheritance information
+    - when a method is called on an instance, its class is looked up then the method is called on the class with the instance variables.
+  - prototypes
+    - there are no classes---everything is an object.
+    - objects can *delegate to* one another. this is analogous to inheritance in the class-based style.
