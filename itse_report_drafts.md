@@ -1,3 +1,24 @@
+---
+documentclass: article
+classoption:
+    - twocolumn
+fontfamily: gfsartemisia
+fontsize: 12pt
+output:
+  pdf_document: 
+    latex_engine: pdflatex
+title:  'This is the title: it contains a colon'
+author:
+- Author One
+- Author Two
+keywords: [nothing, nothingness]
+abstract: |
+  This is the abstract.
+
+  It consists of two paragraphs.
+
+---
+
 ## PESTLE
 
 A PESTLE analysis is a tool employed at the outset of starting a project or company. Its purpose is to lay out the different external factors that could affect the operation of the project or company. In addition to idenifying external factors, it is important to know what kind they are---political, economic, social, technological, legal, or ecological---as it clarifies the constraints imposed on different parts of the project.
