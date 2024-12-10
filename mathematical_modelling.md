@@ -2,6 +2,7 @@
 documentclass: article
 header-includes:
   - \usepackage{unicode-math}
+  - \usepackage{float}
   - \numberwithin{equation}{section}
 mainfont: Source Sans Pro Light
 monofont: Source Code Pro
@@ -24,13 +25,14 @@ toc: true
 numbersections: true
 author:
 - '`Ky Anh Nguyen \\ \small{152259013}`{=latex}'
-- Quang Truong
+- '`Quang Truong \\ \small{152304793}`{=latex}'
 - '`Favour Anefu \\ \small{152146236}`{=latex}'
 affiliation: None
 date: \today
-title: Mixing Liquids Model
+title: 'Two-Tank Mixing System: Analytical and Numerical Analysis'
 abstract: |
-  \noindent This project examines the mixing dynamics of saltwater in two linked tanks, studying how external inflows, outflows, and transfers between tanks affect salt concentrations over time. A system of first-order differential equations was created and solved through numerical methods in MATLAB. The model's validity was evaluated via different scenarios, sensitivity analyses, and transient behaviors monitor. Findings show that equilibrium levels are affected by flow dynamics and input concentrations, highlighting the model's relevance to realistic and practical systems.
+  \noindent This project examines the mixing dynamics of salt and pure water in interconnected tanks, studying how external inflows, outflows, and exchanges between the tanks affect salt concentrations over time. A system of first-order differential equations was created and solved both analytically and numerically. In the course of the analytical evaluation, an equation was derived by which the relationship between the concentrations in both tanks can be predicted using only the values of the system parameters. This expression was used to select values for two different cases for which the system was solved.
+reference-section-title: References
 include-before:
 - \newpage{}
 ---
@@ -39,6 +41,36 @@ $\pagebreak$
 
 # List of Symbols
 
+\begin{tabbing}
+$t$ \hspace{2cm} \= Time (minutes). \\
+$S_A(t)$ \> Salt mass in Tank A at time $t$ (kg). \\
+$S_B(t)$ \> Salt mass in Tank B at time $t$ (kg). \\
+$\symbfit{S}(t)$ \> Salt mass vector as time $t$: $[S_A(t), S_B(t)]^\top$. \\
+$S_A$, $c_A$ \> Salt mass and concentration in Tank A respectively at steady-state. \\
+$S_B$, $c_B$ \> Salt mass and concentration in Tank B respectively at steady-state. \\
+$\symbfit{S}_{\text{steady}}$ \> Steady-state salt mass vector $[S_A, S_B]^\top$. \\
+$V_{A+}$ \> Inflow rate to Tank A (L/min). \\
+$V_{B+}$ \> Inflow rate to Tank B (L/min). \\
+$V_{A-}$ \> Outflow rate from Tank A (L/min). \\
+$V_{B-}$ \> Outflow rate from Tank B (L/min). \\
+$V_{AB}$ \> Flow rate from Tank A to Tank B (L/min). \\
+$V_{BA}$ \> Flow rate from Tank B to Tank A (L/min). \\
+$K_A$ \> Salt concentration in inflow to Tank A (kg/L). \\
+$K_B$ \> Salt concentration in inflow to Tank B (kg/L). \\
+$A$ \> Coefficient matrix of the steady-state solution. \\
+$M$ \> Coefficient matrix of the system. \\
+$\symbfit{b}$ \> External input vector. \\
+$\lambda_1, \lambda_2$ \> Eigenvalues of matrix $M$. \\
+$\symbfit{v}_1, \symbfit{v}_2$ \> Eigenvectors of matrix $M$. \\
+$A_\alpha$ \> Pipe delivering inflow to Tank A. \\
+$B_\alpha$ \> Pipe delivering inflow to Tank B. \\
+$A_\beta$ \> Pipe connecting Tank A to Tank B (mixing/exchange). \\
+$B_\beta$ \> Pipe connecting Tank B to Tank A (mixing/exchange). \\
+$A_\gamma$ \> Pipe for outflow from Tank A. \\
+$B_\gamma$ \> Pipe for outflow from Tank B. \\
+\end{tabbing}
+
+$\pagebreak$
 
 # Introduction
 
@@ -104,9 +136,9 @@ The equations derived in the preceding sections rely on simplifying assumptions 
     V_{A+} + V_{BA} &= V_{A-} + V_{AB},\,\text{and} \\
     V_{B+} + V_{AB} &= V_{B-} + V_{BA},
   \end{align}
-  which reduce simply to
+  which simply reduce to
   \begin{align}
-    V_{A+} + V_{B+} &= V_{A-} + V_{B-} \label{eq:cons}
+    V_{A+} + V_{B+} &= V_{A-} + V_{B-}. \label{eq:cons}
   \end{align}
 
 These assumptions simplify the system's dynamics, removing the need to account for spatial variations or changing volumes.
@@ -120,77 +152,67 @@ Since our model is a system of two linear ordinary differential equations, an an
 We start by considering the steady state situation. Let $t_s$ be the time at which the system reaches its equilibrium. Also, let
 
 \begin{align*}
-  S_{A_{\text{std}}} &= S_A(t_s) & c_{A_{\text{std}}} &= \frac{S_{A_{\text{std}}}}{100} \\
-  S_{B_{\text{std}}} &= S_B(t_s) & c_{B_{\text{std}}} &= \frac{S_{B_{\text{std}}}}{100}
+  S_A &= S_A(t_s) & c_A &= \frac{S_A}{100} \\
+  S_B &= S_B(t_s) & c_B &= \frac{S_B}{100}
 \end{align*}
 
 be the masses and concentrations of salt in Tank A and Tank B respectively when $t=t_s$. At equilibrium, the rates of change of salt in both tanks are zero. That is, for Tank A,
 
 \begin{align}
   && \frac{dS_A(t)}{dt} &= 0 \\
-  &\Rightarrow& V_{A+} K_A + V_{BA}\frac{S_{B_{\text{std}}}}{100\,\text{L}} - \left(V_{AB}\frac{S_{A_{\text{std}}}}{100\,\text{L}} + V_{A-}\frac{S_{A_{\text{std}}}}{100\,\text{L}}\right) &= 0 \\
-  &\Rightarrow& (100\,\text{L})V_{A+} K_A &= (V_{AB} + V_{A-})S_{A_{\text{std}}} - V_{BA}S_{B_{\text{std}}}. \label{eq:a_equi}
+  &\Rightarrow& V_{A+} K_A + V_{BA}\frac{S_B}{100\,\text{L}} - \left(V_{AB}\frac{S_A}{100\,\text{L}} + V_{A-}\frac{S_A}{100\,\text{L}}\right) &= 0 \\
+  &\Rightarrow& (100\,\text{L})V_{A+} K_A &= (V_{AB} + V_{A-})S_A - V_{BA}S_B. \label{eq:a_equi}
 \end{align}
 
 The steady-state equation for Tank B can be derived in a similar manner as
 
 \begin{align}
-  (100\,\text{L})V_{B+} K_B &= - V_{AB}S_{A_{\text{std}}} + (V_{BA} + V_{B-})S_{B_{\text{std}}}. \label{eq:b_equi}
+  (100\,\text{L})V_{B+} K_B &= - V_{AB}S_A + (V_{BA} + V_{B-})S_B. \label{eq:b_equi}
 \end{align}
 
-$\autoref{eq:a_equi}$ and $\autoref{eq:b_equi}$ form a system of two linear equations which can be solved for $S_{A_{\text{std}}}$ and $S_{B_{\text{std}}}$ simultaneously. We employ the use of matrices to simplify the problem by setting
+$\autoref{eq:a_equi}$ and $\autoref{eq:b_equi}$ form a system of two linear equations which can be solved for $S_A$ and $S_B$ simultaneously. We employ the use of matrices to simplify the problem by setting
 
 \begin{align*}
   A &= \begin{bmatrix}
         V_{AB} + V_{A-} & -V_{BA} \\
         -V_{AB} & V_{BA} + V_{B-}
        \end{bmatrix}, \\
-  \symbfit{x} &= \begin{bmatrix}
-              S_{A_{\text{std}}} \\
-              S_{B_{\text{std}}}
+  \symbfit{S}_{\text{steady}} &= \begin{bmatrix}
+              S_A \\
+              S_B
             \end{bmatrix},\,\text{and} \\
   \symbfit{b} &= \begin{bmatrix}
-              (100\,\text{L})V_{A+} K_A \\
-              (100\,\text{L})V_{B+} K_B
+              V_{A+} K_A \\
+              V_{B+} K_B
             \end{bmatrix}.
 \end{align*}
 
 It follows that
 
 \begin{align}
-  &&A\symbfit{x} &= \symbfit{b} \\
-  &\Rightarrow& \symbfit{x} &= A^{-1}\symbfit{x} \\
+  &&A\symbfit{S}_{\text{steady}} &= (100\,\text{L}) \symbfit{b} \\
+  &\Rightarrow& \symbfit{S}_{\text{steady}} &= (100\,\text{L}) A^{-1}\symbfit{b} \\
   &\Rightarrow& \begin{bmatrix}
-              S_{A_{\text{std}}} \\
-              S_{B_{\text{std}}}
-            \end{bmatrix}                  &= \begin{bmatrix}
-                          \dfrac{100(K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+})}{V_{A-}V_{BA} + V_{AB}V_{B-} + V_{A-}V_{B-}} \\[0.5cm]
-                          \dfrac{100(K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+})}{V_{A-}V_{BA} + V_{AB}V_{B-} + V_{A-}V_{B-}}
-                        \end{bmatrix} \\
-                        &&&= \begin{bmatrix}
-                          \dfrac{100(K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+})}{D} \\[0.5cm]
-                          \dfrac{100(K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+})}{D}
-                        \end{bmatrix} \\
+              S_A \\
+              S_B
+            \end{bmatrix}                  &= \frac{(100\,\text{L})}{V_{A-}V_{BA} + V_{AB}V_{B-} + V_{A-}V_{B-}}\begin{bmatrix}
+                          K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+} \\[0.25cm]
+                          K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+}
+                        \end{bmatrix} \\[0.4cm]
    &\Rightarrow& \begin{bmatrix}
-              c_{A_{\text{std}}} \\
-              c_{B_{\text{std}}}
-            \end{bmatrix} &= \begin{bmatrix}
-                          \dfrac{K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+}}{D} \\[0.5cm]
-                          \dfrac{K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+}}{D}
-                        \end{bmatrix}, \\
-\end{align}
-
-where
-
-\begin{align}
-  D = V_{A-}V_{BA} + V_{AB}V_{B-} + V_{A-}V_{B-}.
+              c_A \\
+              c_B
+            \end{bmatrix} &= \frac{1}{V_{A-}V_{BA} + V_{AB}V_{B-} + V_{A-}V_{B-}}\begin{bmatrix}
+                          K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+} \\[0.25cm]
+                          K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+}
+                        \end{bmatrix}. \\
 \end{align}
 
 We consider two possible cases at equilibrium:
 
 1. The two tanks contain the same quantity of salt. That is
    \begin{align}
-      &&c_{A_{\text{std}}} &= c_{B_{\text{std}}} \\
+      &&c_A &= c_B \\
       &\Rightarrow& K_AV_{A+}(V_{BA}+V_{B-}) + K_BV_{BA}V_{B+} &= K_BV_{B+}(V_{AB}+V_{A-}) + K_AV_{AB}V_{A+} \\
       &\Rightarrow& K_AV_{A+}(V_{BA}+V_{B-}) - K_AV_{AB}V_{A+} &= K_BV_{B+}(V_{AB}+V_{A-}) - K_BV_{BA}V_{B+} \\
       &\Rightarrow& K_AV_{A+}(V_{BA} + V_{B-} - V_{AB}) &= K_BV_{B+}(V_{AB} + V_{A-} - V_{BA}) \\
@@ -238,19 +260,19 @@ Consequently,
   \frac{d}{dt} \symbfit{S}(t) = M \symbfit{S}(t) + \frac{1}{100}\symbfit{b},
 \end{align}
 
-which is solved by
+which is solved by (see [@Boyce2017])
 
 \begin{align}
-  \symbfit{S}(t) = c_1e^{\lambda_1t}\symbfit{v}_1 + c_2e^{\lambda_2t}\symbfit{v}_2 + \symbfit{x}. \label{eq:trans}
+  \symbfit{S}(t) = c_1e^{\lambda_1t}\symbfit{v}_1 + c_2e^{\lambda_2t}\symbfit{v}_2 + \symbfit{S}_{\text{steady}}. \label{eq:trans}
 \end{align}
 
 $c_1$ and $c_2$ are constants that can be determined from the initial conditions of the system, while $\lambda_1$ and $\lambda_2$ are the 
-eigenvalues of $M$, with corresponding eigenvectors $\symbfit{v}_1$ and $\symbfit{v}_2$ respectively. Lastly, $\symbfit{x}$ is the vector of steady-state
+eigenvalues of $M$, with corresponding eigenvectors $\symbfit{v}_1$ and $\symbfit{v}_2$ respectively. Lastly, $\symbfit{S}_{\text{steady}}$ is the vector of steady-state
 salt quantities from earlier.
 
 ### A solution with equal concentrations {#sec:eq_conc}
 
-From the choice of parameters in $\autoref{tab:src_params}$, the coefficient matrix when $c_{A_{\text{std}}} = c_{B_{\text{std}}}$ is
+From the choice of parameters in $\autoref{tab:src_params}$, the coefficient matrix when $c_A = c_B$ is
 
 \begin{equation}
   M = \frac{1}{100}\begin{bmatrix}
@@ -268,9 +290,9 @@ having the following eigenvalues and eigenvectors.
 The steady-state solution for these parameters is
 
 \begin{equation}
-  \symbfit{x} = \begin{bmatrix}
-                  S_{A_{\text{std}}} \\
-                  S_{B_{\text{std}}}
+  \symbfit{S}_{\text{steady}} = \begin{bmatrix}
+                  S_A \\
+                  S_B
                 \end{bmatrix} = \frac{110}{7}\begin{bmatrix}
               1 \\
               1
@@ -303,7 +325,7 @@ $\autoref{eq:ana_eq_comp}$ gives the quantity of salt in both tanks for every ti
 
 ### A solution with a higher concentration of salt in Tank A
 
-Similar to the previous section, we define the coefficient matrix for when $c_{A_{\text{std}}} > c_{B_{\text{std}}}$ using the parameters in the $>$ column of $\autoref{tab:src_params}$:
+Similar to the previous section, we define the coefficient matrix for when $c_A > c_B$ using the parameters in the $>$ column of $\autoref{tab:src_params}$:
 
 \begin{equation}
   M = \frac{1}{100}\begin{bmatrix}
@@ -321,9 +343,9 @@ with eigenvalues and eigenvectors (rounded to five decimal places) and values of
 At steady-state, the quantities of salt in both tanks are
 
 \begin{equation} \label{eq:greater}
-  \symbfit{x} = \begin{bmatrix}
-                  S_{A_{\text{std}}} \\
-                  S_{B_{\text{std}}}
+  \symbfit{S}_{\text{steady}} = \begin{bmatrix}
+                  S_A \\
+                  S_B
                 \end{bmatrix} = \begin{bmatrix}
               11.04031 \\
               10.98368
@@ -342,7 +364,7 @@ Unlike $\autoref{eq:ana_eq_comp}$, $\autoref{eq:ana_gt_comp}$ uses approximate v
 
 ## Numerical solution
 
-We solve the system numerically by employing the use of MATLAB's `ode45` solver. The function `numerical_solution()`, which is defined in $\ref{sec:numerical_func}$ takes a vector of the parameters of the system as an argument and returns the result of calling `ode45` on a model defined with those parameters. In the code listing below, `numerical_solution()` is called twice---once for the set of parameters of each case, then the results are plotted in two separate figures---$\autoref{fig:eq_conc}$ and $\autoref{fig:gt_conc}$.
+We solve the system numerically by employing the use of MATLAB's `ode45` solver as documented in [@MATLAB_ode45]. The function <span style="white-space: nowrap;">`numerical_solution()`</span>, which is defined in $\ref{sec:numerical_func}$ takes a vector of the parameters of the system as an argument and returns the result of calling `ode45` on a model defined with those parameters. In the code listing below, <span style="white-space: nowrap;">`numerical_solution()`</span> is called twice---once for the set of parameters of each case, then the results are plotted in two separate figures---$\autoref{fig:eq_conc}$ and $\autoref{fig:gt_conc}$.
 
 ```matlab
 [t_eq, c_eq] = numerical_solution(eq_params);
@@ -366,17 +388,39 @@ title('Salt Dynamics for Case 2: Tank A > Tank B');
 grid on;
 ```
 
-![Evolution of salt concentration in Tanks A and B for Case 1.](./eq_conc.jpg){#fig:eq_conc width=75%}
+![Evolution of salt concentration in Tanks A and B for Case 1.](./eq_conc.jpg){#fig:eq_conc width=65%}
 
-![Evolution of salt concentration in Tanks A and B for Case 2.](./gt_conc.jpg){#fig:gt_conc width=75%}
+![Evolution of salt concentration in Tanks A and B for Case 2.](./gt_conc.jpg){#fig:gt_conc width=65%}
 
 A cursory glance at both figures would show that in both cases, the salt concentrations converge to about the same values that the analytical solution predicted. This, as well as the time evolution of both models, will be investigated in the next chapter.
 
 # Methods
 
+To see how well the analytical and numerical solutions match, we plot the time evolution of the concentration of salt in Tank A predicted by both methods on the same figure. $\autoref{fig:eq_comp}$ shows this plot for Case 1, while $\autoref{fig:gt_comp}$ shows that for Case 2.
+
+![Salt concentration in Tank A over time for Case 1 as predicted by both solution methods.](./eq_comp.jpg){#fig:eq_comp width=65%}
+
+![Salt concentration in Tank A over time for Case 2 as predicted by both solution methods.](./gt_comp.jpg){#fig:gt_comp width=65%}
+
+As can be seen, the numerical solution matches closely with the analytical solution and vice versa even in the second case when non-exact values of the equation constants were used.
+
+The analytical solution offers a precise representation of the system's behaviour in terms of eigenvalues, eigenvectors, and steady-state values, which allows for a deeper understanding of the system’s dynamics. Deriving the analytical solution, however, is mathematically intensive. Additionally, analytical methods are often limited to linear systems with constant coefficients, making them intractable for more complex or non-linear problems. In contrast, numerical methods are well-suited for solving a broader range of problems, including non-linear systems and those with time-varying parameters.
+
 # Results
 
-# Appendice
+From the solutions to the system presented in $\ref{solutions}$, both tanks approach a constant concentration of approximately 0.1571 kg/L in the first case. In Case 2, the liquid in Tank A approaches a constant concentration of 0.1104 kg/L, while the concentration of that of Tank B approaches 0.1098 kg/L. Also, neither tank approach its steady-state faster than the other in each case.
+
+Basing our model on the principle of conservation of mass provides a solid foundation for a correct analysis of the actual, real-world behaviour of the system. Though simple, the solutions proposed remain valid for a variety of system paramaters, as long as they do not breaking the starting assumptions.
+
+These assumptions, however, limit the model's practicability. In real-world situations, the assumptions of perfect mixing and constant liquid volume may be very difficult to ensure, leading to significant disparities between model predictions and actual measurements. Moreover, the model's exclusion on non-linearities is sure to hamper its performance in actual liquid-mixing problems.
+
+# Summary
+
+Throughout the project, we explored the mixing dynamics of a two-tank saltwater system, with an in-depth usage of analytical and numerical methods to model and predict the system's evolution and steady-state behavior. Using mass conservation principles, a model of first-order differential equations was derived to illustrate the salt concentrations in the two tanks. Regarding the analytical solution, it provided insights into steady-state conditions and transient dynamics, with cases examined for both equal and unequal steady-state concentrations. While with the numerical method, its simulations with MATLAB's ode45 confirmed the analytical results, ensuring the consistency despite approximated values.
+
+To sum up, the study showed that the system reliably reaches steady-state concentrations under given assumptions, such as perfect mixing or constant tank volumes. However, despite their simplicity, these assumptions may limit real-world applicability. Hence for more complex scenarios, we can pivot by, for instance, extending the model to account for non-linearities and variable volume. Combining both analytical and numerical precision and versatility, the project has provided an in-depth, complete approach to coupled mixing systems studies and designs within various engineering and environmental contexts.
+
+# Appendices
 
 ## Parameter search function {#sec:search_func}
 
@@ -394,7 +438,7 @@ for v_ap = vs
         for v_am = vs
             for v_bm = vs
                 if (v_ap + v_bp) == (v_am + v_bm)
-                    rates(i,1:4) = [v_ap, v_am, v_bp, v_bm];
+                    rates(i,:) = [v_ap, v_am, v_bp, v_bm];
                     i = i + 1;
                     if i > N
                         stop = 1;
@@ -475,5 +519,3 @@ function dxdt = salt_dynamics(~, x, V_Ap, V_Am, V_Bp, V_Bm, V_AB, V_BA, K_A, K_B
   dxdt = [dx_A; dx_B];
 end
 ```
-
-# Summary
