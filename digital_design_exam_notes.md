@@ -1,0 +1,1 @@
+- [past exams](https://tite.cs.tut.fi/tenttiarkisto?hae=digitaa&laitos=)
