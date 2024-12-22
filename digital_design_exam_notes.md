@@ -1,1 +1,522 @@
 - [past exams](https://tite.cs.tut.fi/tenttiarkisto?hae=digitaa&laitos=)
+
+### lecture 1
+
+- design flow and design views
+  - the aspects of a system that are considered at a time
+  - Y-model
+    - functional
+      - the model's operations
+    - architectural
+      - the model's constituent parts and how they are organized
+      - timing (in clock cycles) is also of interest here
+    - implementation
+      - the model's physical components and the kinds they are
+        - their area, cost, and power consumption
+        - clock speed is considered here
+    - design capture is how the designer describes a view
+      - func
+        - hdl
+        - expressions
+        - tables/diagrams
+      - arch
+        - block diagrams
+        - hdl
+      - impl
+        - netlist
+        - asic tapeout
+  - mapping/synthesis is the realization of functional requirements on the available resources
+    - from functional to arch to impl
+    - mapping styles from functional to architectural
+      - one-to-one
+        - fast
+        - large
+        - low reusability
+      - indirect
+        - architecture can realize other functionalities
+        - no exact correspondence
+- difference between software and hardware programming
+  - timing is exact in digital design but not so in software
+    - we can control exact timings for operations wrt clk signals
+  - operations are execd in sequential order for software but parallel for software
+- types of digital systems: async and synch
+- design process
+  - specification to design to impl to analysis
+    - analysis can be right after the design phase and can be functional or non-functional
+  - specification should show i/o, comm protocols and functionality
+  - design
+    - introduce hierarchy and modularity to specification
+    - design capture
+    - design testbench and i/o
+    - optimize for some contraints
+    - verification
+- top-down and bottom-up
+  - bottom-up is usually best for smaller modules like library components
+- better to start from functional requirements and work one's way down to implementations
+- datasheets
+  - to use a module you need the following information
+    - what it does
+    - how it is connected
+    - what is its performance
+  - datasheets usually contain
+    - signals desc and widths
+    - timing spec
+    - functionality
+    - impl constraints
+- electronic design automation (EDA)
+  - Siemens, Synopsys, and Cadence
+  - TUNI builds Kactus2 which is an open source EDA tool
+- extras
+
+
+### lecture 2, comb logic spec
+
+- high level spec
+  - bad spec leads to bad design
+  - in comb systems output depends on only the inputs at the same time instant.
+  - spec contains
+    - input set
+    - output set
+    - spec/func that shows how inputs go to outputs
+      - tables
+      - arith
+      - conditional expressions
+      - logical exprs
+      - composition of the above
+- standard codes
+  - refer to binary codings that have been standardized
+  - ASCII
+  - UTF-8
+  - common binary codes
+    - binary
+    - quaternary
+    - octal
+    - hexadecimal
+  - bit vector indexing
+    - place LSB at the rightmost position
+    - start indexing from 0
+  - binary coded decimals
+- binary level spec
+  - $n$ inputs and $m$ outputs
+  - $m$ *switching functions* are needed --- one for each output bit
+  - $j$-notation simplifies the input comb by using the corresponding decimal notion
+    - for eg, "1011" in the input would be $11$ in $j$-notation
+    - the output of the function (its spec) can be simplified by stating only the inp combs for which it is 0 or 1
+      - tha is $f(x_1,x_2,x_3) = one-set(2,3,6,7)$.
+        - note that the $j$-notation is used here
+      - when there are unspecified outputs (don't cares!), one type of set is not enough to specify the function
+  - we use switching expressions to repr switching funcs
+    - switching algebra is used to evaluate switching exprs
+  - sum of products or product of sums
+  - minterm
+    - product of literals in which one variable appears exactly once
+    - $m$-notation is a way, similar to $j$-notation, of repring minterms with decimal numbers
+    - sum of minterms = sum of products
+
+
+### lecture 3, comb logic design
+
+- course focuses on perf and area optimizations
+- minimization of comb logic
+  - competing goals for optimizations
+    - area
+    - cost
+    - speed
+    - energy consumption
+  - methods
+    - rules from boolean algebra
+      - very small designs
+    - Karnaugh maps
+      - max 4 inputs
+    - tabular method with Quine-McCluskey
+      - what EDA tools use
+      - no limitation of input sizes
+    - heuristic
+      - multi output and multi-level
+      - e.g. ESPRESSO
+- comb logic design
+  - EDA tools cannot efficiently handle very large modules
+  - start from requirements to spec to truth table to minim to switching expression and then to gate nets
+    - do not jump from requirements to gate network
+- standard comb modules
+  - mux
+    - one use is for sharing functional units
+  - demux
+    - data inp is fed to one of different poss outputs depending on selector
+    - use case is fork-join
+      - one input is fed to different operations using a demux (the right operation to perform is chosen based on the 'sel' input)
+  - shifter
+    - overflow could be 0, 1, or a rotate
+    - barrel shifter
+      - shift a bit vector by a distance $s$
+      - relies on the binary repr of $s$
+      - if max possible shift dist is $p=2^r-1$, $r$ shifters are needed.
+        - each shifter performs a shift of $2^j$, where $j$ is the *shifter level*
+    - decoder
+      - sets the output bit corresponding to the minterm value of the input to 1 and all others to 0
+      - is one-hot
+      - op-code decoding in processors
+      - addressing RAMs
+      - to form universal gate networks with OR gates
+    - encoder
+      - has output $A$ that's high when there's a 1 in the input vector
+      - goes from one-hot to binary
+    - LUTs
+      - programmable switching function implementation using memory
+
+
+### lecture 4, analysing and optimizing combinational logic
+
+- analysis
+  - behavioural
+    - how to go from design to spec
+      - assign names to all the signals
+      - start from the outputs and subs each signal with the expression of the function that defines it
+      - continue until no internal signals are left
+    - for debugging, verifying functionality, optimizing perf
+  - timing
+    - part of the non-functional ppties of a system
+    - tells how fast
+    - most important ppty is the propagation delay
+    - prop delay is the time it takes for outputs to change in correspondence to input changes
+      - prop delay when signal changes from H to L is different from L to H
+    - rise and fall times
+      - time for signal level to change from 10% of max to 90% of max and vice versa respectively
+      - not constant but depend on load and temperature
+      - prop delay depends on rise & fall times. hence, prop delay depends on load
+    - load factor $L$
+      - standard, normalized unit of load
+      - prop delay has a linear relationship with $L$: $t_p=a+bL$
+        - $a$ and $b$ are technology specific
+    - fan-out is the max load a gate can drive
+    - area
+      - size is given in units of *equivalent gates*
+    - critical path
+      - longest prop delay through the gate network
+      - accurate determination depends on
+        - loads for outputs
+        - rise and fall times for input signals
+        - solved by bounding comb circuits with registers
+- multi-level gate nets
+  - usual two-level are the SOP or POS forms
+  - there's no standard method like SOP for multi-level nets
+  - usually more than one output
+  - process
+    - get usual SOP form
+    - transform the SOP form to meet requirements (e.g. using only two-input gates)
+      - factoring and combining shared subexpressions
+      - NAND and NOR are not associative. XOR is.
+    - replace complex gates with NAND or NOR
+    - repeat until all requirements are met
+  - meeting load reqs
+    - buffers
+      - change nothing but can drive larger loads
+    - gate network partitioning
+      - a form of divide and conquer
+        - paritiy detector for a bit vector
+          - output is 1 if vector contains an even number of 1's and 0 otherwise
+          - bit vector is split in two
+          - if both halves are even, the overall vector is even
+          - implement parity in these subproblems and combine their results
+
+
+### lecture 5, spec of seq sytems
+
+- specing seq systems
+  - output may depend on both current and past inputs
+  - in digital seq systems, time is discretized and values of signals are checked only at certain time intervals
+  - operation of a state machn produces a state seq
+  - finite memory system
+    - an $m$-log system needs to know $m$ previous values
+    - number of states in this system is $I^{m-1}$ where $I$ is the number of input set elements
+  - what is needed in the spec
+    - inputs
+    - outputs
+    - state set
+    - initial state
+- state machns
+- mealy and moore
+  - moore is resilient to glitches
+  - mealy is one clk cycle faster if the inputs are synchtonised to the clk
+- state names
+  - each state must have a descriptive name
+  - what to use to repr states
+    - integers
+    - binary
+    - vectors
+- state machns in seq systems
+  - state machns remove the need to remember all past input seqs by using states to repr repeating i/o patterns
+  - switching fns in combinational systems are replaced by time fns here
+  - time fns are described using state descriptions
+    - tables
+    - state diagram
+  - how to create state machns from spec
+  - autonomous controller
+    - fixed sequence of states that is independent of inputs
+
+
+### lecture 6, state machine design
+
+- state machn design/canonical impls
+  - seq nets is the term for the different kinds of seq systems
+  - canonical net is a common format to show the structure of a block simply
+  - canonical form is a combination of a combinational network and a state register
+    - comb networks compute next state and output
+- designing canoncial modules
+  - req spec
+  - formal high-level spec
+    - state disgram or transition table
+  - state encoding
+  - switiching exps
+  - minimization
+- example
+  - you mst consider all inp combinations in all states and not just the interesting ones, else the system will malfunction
+  - in cases of incomplete spec, ask for clarification
+    - else, decide on the behaviour yourself and document it
+  - have a so-called "error" state to which all undefined states transition to
+- standard seq modules
+  - shift register
+    - serial-in-parallel-out transform
+    - a $n$-long shift register can be used to delay a signal for $n$ clock cycles
+    - covert serial to parallel format or vice versa
+    - communicate between systems
+  - ALU
+  - counters
+
+
+### lecture 7, time behaviour of state machns
+
+- timing of transitions
+  - ideally, state changes sharply on infinitesimally short clk pulse
+  - in real situations, an infinitesimally short clk is not possible, so consider trans from L to H or H to L
+  - important delays
+    - from input to output
+    - from rising clock to state transition
+    - from state transition to output
+- state register
+  - use only D flip-flops as they do not hide the state transition functions
+  - others like J-K and SR do
+  - useful terms
+    - a clk is on when its value is 1
+    - duty cycle is the ratio of "on" to clk period
+    - timing of D flip-flop
+      - setup time
+        - the time the input signal D must be stable before the rising clk edge
+        - has a minimum value below which D is not allowed/supposed to change
+        - if D stabilizes too late, this constraint is violated
+        - solved by increasing clk period
+      - hold time
+        - the time D must remain stable after the rising clk edge
+        - if D input changes too fast after clk H, this is violated
+        - solved by increasing delay in preceeding logic
+      - prop delay is time from rising clk to Q (state update)
+- sig paths
+  - in discussing timing of state machns, consider both the critical paths of the comb nets and the timing of the registers
+    - critical paths never cross a D flip-flop
+    - the critical path of a state machine determines its minimum clk period
+      - consider a comb net between two state registers
+      - the critical path of this system is the sum of the prop delay of the register from which the comb net gets its inputs, the critical path of the comb net and the setup time of the register to which the comb net deposits its output
+  - constrained sig paths start and end with D flip-flops
+    - their delays can be calculated
+  - unconstrained have either their start or end connected to some unknown network
+    - to determine critical path, the logic of this unknown net must be known
+    - delay is a func of the neighbouring blocks
+- timing of state machns
+  - the slowest path in a system determines the clk period; faster paths have a "slack"
+  - in a canonical state machn, the setup time of the input takes into account the prop delay of the next state logic comb net.
+    - since it is the output of this net that drives the D port of the state register
+    - the setup time of the input to the state machn is therefore the sum of the prop delay of the comb net and the setup time of the state register
+  - hold time considerations
+    - the output $NS$ of the next state comb net must remain stable for at least the hold time of the state register
+    - this output changes after prop delay of the comb net when the input to the state machn changes
+    - if the hold time of the state register is $t_h$, $NS$ must not change before $t_h$
+    - TODO: explain the constraint on the timing of the input wrt $t_h$ and the prop delay of $NS$
+      - the input to the state machn must remain stable for at least $t_h - t_p$ after a rising clk edge. $t_p$ is the prop delay of $NS$.
+  - the prop delay of the state machine is the sum of the prop delay of the state register and that of the output logic comb net
+  - how the maximum clk freq can be determined
+    - the longer critical path of the next state comb net or the output comb net determines the maximum freq at which the system can be driven
+- clock skew
+  - wires cause delays in clk signal which cause different parts of the system to detect rising edge at different times
+    - reason: resistance and capacitance of wires
+  - solved by
+    - tree-like wire path so every clk wire is of the same length
+    - keep clk in a central location on the chip
+
+
+### lecture 8, analysis and features of state machns
+
+- analysis of seq nets
+  - when considering critical path of a system, look at
+    - path from inputs to registers
+    - path from register outputs to register inputs
+- state machn variations
+  - registered output
+    - eliminate glitches
+    - increase clk speed as it terminates the sig path for critical path calcs
+      - for moore, output settles at $t_p$ of output register instead of $t_p + t_pcomb$
+        - $t_pcomb$ is the prop delay of the output logic
+    - latency is increased
+    - special case is a moore machine whose output is the same as its state (provided it can drive the load)
+  - one-hot state machine
+    - only one state is hot at a given time
+    - fast and easy to debug
+    - lots of flip-flops
+    - critical path can be smaller as state transitions boil down to just AND (and sometimes OR) gates
+  - extended state machines
+    - states can have either global or local variables
+    - a way to reduce the number of states
+    - the variables require registers which could mean more area
+
+
+### lecture 9, arithmetic I
+
+- addition of integers
+  - adder module for +ve integers
+    - $x+y+c_{in} = 2^n c_{out} + z$
+      - the carry out is moved $n$ places to the left
+    - generate and propagate signals
+  - ripple-carry
+    - compact but slow
+    - critical path goes through each full-adder module
+  - ==carry lookahead==
+    - produces all the sum bits at once by looking (ahead) at the carry bits
+    - speed independent of width of input
+    - area grows quadratically with input width
+    - ripple carry lookahead is a compromise between the two types
+    - two parts
+      - carry generator, which feeds into
+      - sum generator
+  - parallel prefix
+    - addresses the large fan-in problem of CLA
+    - all modern processors
+    - Ladner-Fisher
+    - Kogge-Stone
+- signed integers
+  - sign and magnitude of $n$ bits
+    - $2r^{n-1}$ numbers can be represented
+    - max value is $r^{n-1} - ulp$, where $ulp$ is the "unit in the last position" (1 for integers)
+  - complement magnitude
+    - $-X = C-X$, where $C$ is the complementation constant and is $r^n$ ($r$ is the radix---2 for binary numbers)
+    - one's complement
+      - ==end-around carry==
+  - sign extension
+    - two's complement
+      - copy MSB to the left and 0's after the decimal position
+    - one's complement
+      - copy MSB to the left and after the decimal point
+    - sign and magnitude
+      - move MSB to the left and fill in zeros before the start bit of the actual number
+      - copy 0's after the decimal point
+
+
+### lecture 11, rtl design, programmable logic circuits
+
+- rtl
+  - a technique for describing large hierarchical designs
+    - system is described as a sequence of data transfers between rtl registers
+      - a transfer is a transformation performed on the data before it is goes from one rtl register to the next
+      - rtl register is a unit composed of data path (and control) blocks
+        - it performs a specified operation and holds the result
+  - whole system is divided into
+    - control
+      - can be implemented with an FSM or combinational (LUT?)
+      - decisions from status info from data path or external inputs
+    - data path
+      - processes or moves data
+      - has many registers for state
+      - operations are determined by the control
+    - both can be designed independently
+    - control state machine is simple as it only manages signals
+    - register transfer operation
+      - $A \leftarrow B*C$
+- designing rtl
+  - how reg transfers can be reprd with task graphs
+  - go from task graphs to hardware (process called mapping)
+    - nonsharing/direct mapping system
+      - each node corresponds to a func unit in hardware
+    - (some) sharing system
+      - one or more func units are reused
+    - unimodule system
+      - only one func unit shared between all cycles
+    - types of control
+      - centralized
+      - decentralized
+        - data paths control themselves
+      - semi-centralized
+    - ==distributor==
+- programmable circuits
+  - before programmable circuits, there were ASICs and circuits made with discrete electronic components
+  - PAL---programmable array logic---were one-time programmable. OR states were fixed but AND states could be programmed
+  - PLA---programmable logic array---both AND and OR states could be programmed
+  - PSA---programmable sequential array--- is a PLA with regs connected to some outputs
+    - PSAs could also be implemented using memory instead of comb circuits
+  - for the first programmable logic devices (PLDs), resetting was done by exposure to UV light
+    - low performance
+    - 1983 by Altera
+  - fpgas
+    - many logic elements
+      - LUTs built with SRAMs and connected to D flip-flops
+      - MUXes (also programmed by SRAM) are used to select either comb or register output
+    - programmable interconnects
+      - to connect different LEs and IO pins together
+      - implemented with transistors, whose gates are connected to memory cells
+    - modern uses
+      - asic prototyping
+      - machine learning
+      - system on chip
+
+
+### lecture 12, rtl analysis
+
+- analysis
+  - separate control from data
+  - find input and output
+  - find internal signals
+- modules
+  - register file
+    - a set of registers packed into a single component
+    - simultaneous read and write is possible in one clk cycle
+  - RAM
+  - Dual Port
+    - simultaneous read and right unlike RAM
+  - FIFO
+    - written and read in the same order
+    - no clk signal
+    - no address
+    - status full and empty signals
+    - for connecting components that produce and consume data at different speeds (e.g. different clk domains)
+    - can be synchronous
+      - read and write operations have different clk signals
+- multi-module systems
+  - modules are often called IP-blocks
+  - how to connect different modules together
+    - physical connections
+      - width of data and other signals
+    - topology
+      - pipeline
+        - connected end-to-end in a row or ring
+        - link are independent---each with its own width, speed and protocol
+      - bus
+        - modules are interconnected
+        - used if data must be transferred between modules at all times
+        - shared signal: same protocol, width, and speed
+        - implementation
+          - mux
+            - one mux for all modules
+            - each module has its own multiplexer
+              - they all can write to the bus at the same time if they have dedicated slices of the bus's width
+          - AND-OR
+            - one AND gate for each module and one OR gate for the system
+              - fan-in and fan-out of OR are equal to the number of modules
+            - one OR gate for all but the first module
+              - last OR gate still has a large fan-out
+      - crossbar
+        - each module is connected to every other module by different data lines
+        - multiple data transfers are possible
+        - arbitration needed
+    - arbitration
+      - which module gets access to a shared resource and for how long
+      - as an LUT
+      - or as a state machine if number of previous accesses needs to be taken into account
+    - protocol
+- example

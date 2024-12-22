@@ -257,7 +257,8 @@ Let $M=-\dfrac{1}{100}A$ and
 Consequently,
 
 \begin{align}
-  \frac{d}{dt} \symbfit{S}(t) = M \symbfit{S}(t) + \frac{1}{100}\symbfit{b},
+  \frac{d}{dt} \symbfit{S}(t) = M \symbfit{S}(t) + \frac{1}{100}\symbfit{b}, \\
+  \frac{d}{dt} \symbfit{S}(t) = \symbfit{0}
 \end{align}
 
 which is solved by (see [@Boyce2017])
