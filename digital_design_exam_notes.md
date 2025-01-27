@@ -213,7 +213,7 @@
       - change nothing but can drive larger loads
     - gate network partitioning
       - a form of divide and conquer
-        - paritiy detector for a bit vector
+        - parity detector for a bit vector
           - output is 1 if vector contains an even number of 1's and 0 otherwise
           - bit vector is split in two
           - if both halves are even, the overall vector is even
@@ -265,7 +265,7 @@
 - designing canoncial modules
   - req spec
   - formal high-level spec
-    - state disgram or transition table
+    - state diagram or transition table
   - state encoding
   - switiching exps
   - minimization
