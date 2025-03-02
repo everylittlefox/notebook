@@ -1,0 +1,203 @@
+{
+  "main": {
+    "id": "fdf1e27534cc6db6",
+    "type": "split",
+    "children": [
+      {
+        "id": "32bce59ead5719ff",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eb8a0783571e6011",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "bsc_thesis/student-handbook-slm-rag/rag-for-knowledge-intensive.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "rag-for-knowledge-intensive"
+            }
+          },
+          {
+            "id": "0245c26ac512baa5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "useful-links.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "useful-links"
+            }
+          },
+          {
+            "id": "6b14ab71818f6e66",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "lit_review/_paper.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "_paper"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a9d03b9c19ef29d4",
+    "type": "split",
+    "children": [
+      {
+        "id": "0d0d268a920a3d40",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9daf59f50355343c",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "554e6d0d91661e65",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "6fa5a2388867d66b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "8a435c13c477f8b3",
+    "type": "split",
+    "children": [
+      {
+        "id": "586614e3981e1854",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0a301e6ee2e8418d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "semiconductor_device_physics.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for semiconductor_device_physics"
+            }
+          },
+          {
+            "id": "6304eb4bd7bc2d5b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "semiconductor_device_physics.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from semiconductor_device_physics"
+            }
+          },
+          {
+            "id": "306d35d18e6c805c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "5ac8ce94ab396dc0",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "semiconductor_device_physics.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of semiconductor_device_physics"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "6b14ab71818f6e66",
+  "lastOpenFiles": [
+    "lit_review/lit-review.bib",
+    "bsc_thesis/student-handbook-slm-rag/rag-survey.pdf",
+    "bsc_thesis/student-handbook-slm-rag/rag-for-knowledge-intensive.pdf",
+    "useful-links.md",
+    "semiconductor_device_physics.md",
+    "algo_for_graphs.md"
+  ]
+}

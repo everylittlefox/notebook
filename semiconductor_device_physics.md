@@ -1,1 +1,39 @@
 ### p-n junction
+
+- the contact potential
+	- if a p-type semiconductor is brought next to an n-type semiconductor, we expect there to be a diffusion of carriers across the junction where they meet.
+	- in gases, this diffusion would continue until there is a uniform distribution of the different molecules (carriers) on both sides of the junction.
+	- this is not the case for semiconductors because of the development of *space charge* and an electric field.
+	- the diffusion of electrons from the n- side leaves behind *uncompensated* holes ($N_d^+$), and the diffusion of holes from the p- side leaves uncompensated electrons ($N_a^-$).
+	- this polarity of charges sets up an electric field (with a direction opposite to that of the diffusion current).
+		- the electric field sets up a drift current in the opp direction of the diffusion current.
+		- as a result, at equilibrium, there is no net current flow.
+		- the region of the electric field is called the *transition region*
+		- the p.d. across the transition region is the *contact potential* $V_0$
+			- an equilibrium quantity: cannot result in a net current
+			- the energy bands in the two regions are affected by the contact potential
+			- both conduction and valence bands are higher on the p- side than on the n- side.
+			- the difference between the p- conduction band and the n- conduction band is equal to that of the valence bands.
+			- this delta is equal to $qV_0$.
+			- the separation of the bands in this way is so as to make the Fermi level constant across the device
+			- $$V_0 = \frac{kT}{q}\ln{ \frac{p_p}{p_n} } = \frac{kT}{q}\ln{ \frac{N_aN_d}{n_i^2} }$$
+				- $p_p$ is the number of acceptor atoms in the p- side of the junction
+				- $p_n$ is the number of acceptor atoms in the n- side.
+			- another useful form of the equation is: $$\frac{p_p}{p_n} = \frac{n_n}{n_p} = e^{ \frac{qV_0}{kT} }$$
+- equilibrium Fermi levels
+	- =="When bias is applied to the junction, the potential barrier is raised or lowered from the value of the contact potential, and the Fermi levels on either side of the junction are shifted with respect to each other by an energy in electron volts numerically equal to the applied voltage in volts."==
+- space charge at junction
+	- at any given time in the transition region, carriers are being swept out either by diffusion or by the electric field.
+	- hence, only a small number of carriers can be said to be present in the region.
+	- this number can be taken to be the number of uncompensated electrons in the p- side and holes in the n- side.
+	-  =="The assumption of carrier depletion within W and neutrality outside W is known as the depletion approximation"==
+	- the width of the transition region $W$ is given by $$W = \left[ \frac{2\epsilon V_0}{q} \left( \frac{1}{N_a} + \frac{1}{N_d} \right) \right]^{1/2}$$
+	- let $x_{p0}$ be the penetration of the transition region into the p- side and $x_{n0}$ be that of the n- side, then
+		- $$x_{p0} = \frac{W}{1 + N_a/N_d}$$
+		- $$x_{n0} = \frac{W}{1 + N_d/N_a}$$
+- forward- and reverse-biased junctions
+	- when a p.d. ($V$) is applied across a p-n junction with contact potential $V_0$, the new barrier height of the band diagram is $V_0 - V$.
+	- the bands of the two different sides, which were joined when they had the same Fermi levels, are separated here.
+		- in units of $eV$, the Fermi levels are separated by an energy gap numerically equal to the applied voltage $V$.
+	- ===electron and hole drift currents are independent of the applied voltage==
+	- ==generation current==

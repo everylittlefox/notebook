@@ -1,0 +1,3 @@
+- [better rag](https://huggingface.co/blog/hrishioa/retrieval-augmented-generation-1-basics)
+- [prompting llms](https://olickel.com/everything-i-know-about-prompting-llms)
+- 
