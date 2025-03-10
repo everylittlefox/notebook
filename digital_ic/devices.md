@@ -1,0 +1,2 @@
+- $V_GS - V_T$ is the overdrive voltage
+- cross-talk between components due to parasitic capacitances
